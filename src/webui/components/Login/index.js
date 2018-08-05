@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Form, Button, Dialog, Input, Alert} from 'element-react';
 
-const LoginModal = ({visibility, error, onCancel, onChange, onSubmit}) => {
+const LoginModal = ({
+  visibility = false,
+  error = {},
+  onCancel = () => {},
+  onChange = () => {},
+  onSubmit = () => {}
+}) => {
   return (
     <Dialog
       title="Login"

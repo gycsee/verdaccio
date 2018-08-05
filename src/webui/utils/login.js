@@ -34,12 +34,8 @@ export function isTokenExpire(token) {
 }
 
 
-export async function login(username, password) {
-    const payload = {
-        error: null,
-        username: null,
-        token: null
-    };
+export async function makeLogin(username, password) {
+    const payload = {};
 
     if (isString(username) === false && isString(password) === false) {
         payload.error = {
@@ -47,6 +43,7 @@ export async function login(username, password) {
             type: 'error',
             description: 'Something went wrong.'
         };
+        return payload;
     }
 
     if (size(username) < 1 || size(password) < 1) {
@@ -55,9 +52,9 @@ export async function login(username, password) {
             type: 'error',
             description: 'Username or password can\'t be empty!'
         };
-
         return payload;
     }
+
     try {
         const credentials = {username, password};
         const resp = await API.request(`login`, 'POST', {
@@ -67,7 +64,7 @@ export async function login(username, password) {
                 'Content-Type': HEADERS.JSON
             }
         });
-        payload.name = resp.username;
+        payload.username = resp.username;
         payload.token = resp.token;
         return payload;
     } catch (e) {

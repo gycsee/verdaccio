@@ -15,7 +15,7 @@ const loadingMessage = 'Loading...';
 export default class Detail extends Component {
   static propTypes = {
     match: PropTypes.object,
-    isLoggedIn: PropTypes.bool
+    isUserLoggedIn: PropTypes.bool
   };
 
   state = {
@@ -36,7 +36,7 @@ export default class Detail extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.isLoggedIn !== this.props.isLoggedIn) {
+    if (newProps.isUserLoggedIn !== this.props.isUserLoggedIn) {
       // eslint-disable-next-line
       console.log('here');
       let packageName = this.getPackageName(newProps);

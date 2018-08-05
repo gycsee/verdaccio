@@ -13,7 +13,7 @@ import Search from '../../components/Search';
 export default class Home extends React.Component {
   static propTypes = {
     children: PropTypes.element,
-    isLoggedIn: PropTypes.bool
+    isUserLoggedIn: PropTypes.bool
   }
 
   state = {
@@ -33,7 +33,7 @@ export default class Home extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.isLoggedIn !== nextProps.isLoggedIn) {
+    if (this.props.isUserLoggedIn !== nextProps.isUserLoggedIn) {
       this.loadPackages();
     }
   }

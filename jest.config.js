@@ -6,7 +6,7 @@ module.exports = {
   collectCoverage: true,
   testEnvironment: 'jest-environment-jsdom-global',
   testURL: 'http://localhost',
-  testRegex: '(test/unit.*\\.spec|test/unit/webui/.*\\.spec)\\.js',
+  testRegex: '(test/unit/webui/.*\\.spec)\\.js',
   setupFiles: [
     './test/unit/setup.js'
   ],
@@ -40,7 +40,7 @@ module.exports = {
     '<rootDir>/test',
   ],
   moduleNameMapper: {
-    '\\.(scss)$': '<rootDir>/node_modules/identity-obj-proxy',
+    '\\.(scss|css)$': '<rootDir>/node_modules/identity-obj-proxy',
     'github-markdown-css': '<rootDir>/node_modules/identity-obj-proxy',
     '\\.(png)$': '<rootDir>/node_modules/identity-obj-proxy',
     '\\.(svg)$': '<rootDir>/test/unit/empty.js'

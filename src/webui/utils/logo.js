@@ -1,6 +1,6 @@
 import API from './api';
 
-export async function logo() {
+export default async function logo() {
     try {
         const logo = await API.request('logo');
         return logo;

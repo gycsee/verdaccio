@@ -1,16 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button} from 'element-react';
+import capitalize from 'lodash/capitalize';
 import {getRegistryURL} from '../../utils/url';
 import classes from './header.scss';
 import './logo.png';
 
-const Header = ({logo, scope, user, handleLogout, toggleLoginModal}) => {
+const Header = ({
+  logo = '',
+  scope = '',
+  username = '',
+  handleLogout = () => {},
+  toggleLoginModal = () => {}
+}) => {
   const registryUrl = getRegistryURL();
   return (
     <header className={classes.header}>
       <div className={classes.headerWrap}>
-        <img src={logo} className={classes.logo} />
+        <a href="">
+          <img src={logo} className={classes.logo} />
+        </a>
         <figure>
           npm set {scope}registry {registryUrl}
           <br />
@@ -18,26 +27,30 @@ const Header = ({logo, scope, user, handleLogout, toggleLoginModal}) => {
         </figure>
 
         <div className={classes.headerRight}>
-          {user.name ? (<div className="user-logged">
-            <span
-              className="user-logged-greetings"
-              style={{marginRight: '10px'}}
-            >
-              Hi, {user.name}
-            </span>
+          {username ? (
+            <div className="user-logged">
+              <span
+                className="user-logged-greetings"
+                style={{marginRight: '10px'}}
+              >
+                Hi, {capitalize(username)}
+              </span>
+              <Button
+                className={`${classes.headerButton} header-button-logout`}
+                type="danger"
+                onClick={() => handleLogout()}
+              >
+                Logout
+              </Button>
+            </div>
+          ) : (
             <Button
-              className={`${classes.headerButton} header-button-logout`}
-              type="danger"
-              onClick={() => handleLogout()}
+              className={`${classes.headerButton} header-button-login`}
+              onClick={() => toggleLoginModal()}
             >
-              Logout
+              Login
             </Button>
-          </div>) : (<Button
-            className={`${classes.headerButton} header-button-login`}
-            onClick={() => toggleLoginModal()}
-          >
-            Login
-          </Button>)}
+          )}
         </div>
       </div>
     </header>
@@ -45,9 +58,9 @@ const Header = ({logo, scope, user, handleLogout, toggleLoginModal}) => {
 };
 
 Header.propTypes = {
-  logo: PropTypes.string.isRequired,
-  scope: PropTypes.string.isRequired,
-  user: PropTypes.object.isRequired,
+  logo: PropTypes.string,
+  scope: PropTypes.string,
+  username: PropTypes.string,
   handleLogout: PropTypes.func.isRequired,
   toggleLoginModal: PropTypes.func.isRequired
 };

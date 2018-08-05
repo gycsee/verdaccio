@@ -3,10 +3,9 @@ import 'element-theme-default';
 import {i18n} from 'element-react';
 import locale from 'element-react/src/locale/lang/en';
 
-import {LogInContext} from './context';
 import storage from './utils/storage';
-import {logo} from './utils/logo';
-import {login, isTokenExpire} from './utils/login';
+import logo from './utils/logo';
+import {makeLogin, isTokenExpire} from './utils/login';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -35,6 +34,7 @@ export default class App extends Component {
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
     this.setUsernameAndPassword = this.setUsernameAndPassword.bind(this);
     this.doLogin = this.doLogin.bind(this);
+    this.loadLogo = this.loadLogo.bind(this);
   }
 
   componentDidMount() {
@@ -45,7 +45,7 @@ export default class App extends Component {
     if (isTokenExpire(token)) {
       this.handleLogout();
     } else {
-      this.setState({user: {name: username, token}});
+      this.setState({user: {username, token}});
       this.setState({isUserLoggedIn: true});
     }
   }
@@ -82,23 +82,26 @@ export default class App extends Component {
    */
   async doLogin(event) {
     event.preventDefault();
-    const {username, password} = this.state;
-    const {name, token, error} = await login(username, password);
+    const {username, token, error} = await makeLogin(
+      this.state.username,
+      this.state.password
+    );
 
-    if (name && token) {
+    if (username && token) {
       this.setState({
         user: {
-          name,
+          username,
           token
         }
       });
-      storage.setItem('username', name);
+      storage.setItem('username', username);
       storage.setItem('token', token);
       // clost login modal after successful login
       this.setState({isUserLoggedIn: true});
       this.setState({showLoginModal: false});
     }
-
+    // eslint-disable-next-line
+    console.log('here');
     if (error) {
       this.setState({error});
     }
@@ -116,26 +119,31 @@ export default class App extends Component {
   }
 
   render() {
-    const {error, logoUrl, showLoginModal, user, scope, isUserLoggedIn} = this.state;
+    const {
+      error,
+      logoUrl,
+      showLoginModal,
+      user,
+      scope,
+      isUserLoggedIn
+    } = this.state;
     return (
       <div className="page-full-height">
-        <Header
-          logo={logoUrl}
-          user={user}
-          scope={scope}
-          toggleLoginModal={this.toggleLoginModal}
-          handleLogout={this.handleLogout}
-        />
-        <LoginModal
-          visibility={showLoginModal}
-          error={error}
-          onChange={this.setUsernameAndPassword}
-          onCancel={this.toggleLoginModal}
-          onSubmit={this.doLogin}
-        />
-        <LogInContext.Provider value={isUserLoggedIn}>
-          <Route />
-        </LogInContext.Provider>
+          <Header
+            logo={logoUrl}
+            username={user.username}
+            scope={scope}
+            toggleLoginModal={this.toggleLoginModal}
+            handleLogout={this.handleLogout}
+          />
+          <LoginModal
+            visibility={showLoginModal}
+            error={error}
+            onChange={this.setUsernameAndPassword}
+            onCancel={this.toggleLoginModal}
+            onSubmit={this.doLogin}
+          />
+          <Route isUserLoggedIn={isUserLoggedIn} />
         <Footer />
       </div>
     );
