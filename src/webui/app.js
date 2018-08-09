@@ -32,7 +32,6 @@ export default class App extends Component {
     super(props);
     this.handleLogout = this.handleLogout.bind(this);
     this.toggleLoginModal = this.toggleLoginModal.bind(this);
-    this.setUsernameAndPassword = this.setUsernameAndPassword.bind(this);
     this.doLogin = this.doLogin.bind(this);
     this.loadLogo = this.loadLogo.bind(this);
   }
@@ -67,24 +66,13 @@ export default class App extends Component {
   }
 
   /**
-   * set login modal's username and password to current state
-   * Required by: <LoginModal />
-   */
-  setUsernameAndPassword(name, e) {
-    this.setState({
-      [name]: e
-    });
-  }
-
-  /**
    * handle login
    * Required by: <Header />
    */
-  async doLogin(event) {
-    event.preventDefault();
+  async doLogin(usernameValue, passwordValue) {
     const {username, token, error} = await makeLogin(
-      this.state.username,
-      this.state.password
+      usernameValue,
+      passwordValue
     );
 
     if (username && token) {
@@ -100,8 +88,6 @@ export default class App extends Component {
       this.setState({isUserLoggedIn: true});
       this.setState({showLoginModal: false});
     }
-    // eslint-disable-next-line
-    console.log('here');
     if (error) {
       this.setState({error});
     }

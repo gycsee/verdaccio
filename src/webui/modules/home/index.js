@@ -54,27 +54,24 @@ export default class Home extends React.Component {
   }
 
   async loadPackages() {
-    // try {
-      API.request('packages', 'GET').then((d) => {
-        // eslint-disable-next-line
-        console.log(d);
-        if (this.state.query === '') {
-          this.setState({
-            packages: d,
-            loading: false
-          });
-        }
-      }).catch((err) => {
-        MessageBox.msgbox({
-          type: 'error',
-          title: 'Warning',
-          message: 'Unable to load package list: ' + err.message
-        });
-      })
-    // } catch (err) {
+    try {
+      this.req = await API.request('packages', 'GET');
 
-    // }
+      if (this.state.query === '') {
+        this.setState({
+          packages: this.req,
+          loading: false
+        });
+      }
+    } catch (error) {
+      MessageBox.msgbox({
+        type: 'error',
+        title: 'Warning',
+        message: `Unable to load package list: ${error.message}`
+      });
+    }
   }
+
 
   async searchPackage(query) {
     try {

@@ -38,7 +38,7 @@ describe('App', () => {
   beforeEach(() => {
     wrapper = mount(<App />);
   });
-  xit('loadLogo: set logo url in state', async () => {
+  it('loadLogo: set logo url in state', async () => {
     const { loadLogo } = wrapper.instance();
     await loadLogo();
     expect(wrapper.state().logoUrl).toEqual(
@@ -64,7 +64,7 @@ describe('App', () => {
     expect(wrapper.state('password')).toEqual('1234');
   });
 
-  xit('handleLogout - logouts the user and clear localstorage', () => {
+  it('handleLogout - logouts the user and clear localstorage', () => {
     const { handleLogout } = wrapper.instance();
     storage.setItem('username', 'verdaccio');
     storage.setItem('token', 'xxxx.TOKEN.xxxx')
@@ -74,4 +74,15 @@ describe('App', () => {
     expect(wrapper.state('user')).toEqual({});
     expect(wrapper.state('isLoggedIn')).toBeFalsy();
   });
+
+  // it('doLogin - login the user', async () => {
+  //   const { doLogin } = wrapper.instance();
+  //   storage.setItem('username', 'verdaccio');
+  //   storage.setItem('token', 'xxxx.TOKEN.xxxx')
+
+  //   handleLogout();
+  //   expect(handleLogout()).toBeUndefined();
+  //   expect(wrapper.state('user')).toEqual({});
+  //   expect(wrapper.state('isLoggedIn')).toBeFalsy();
+  // });
 });
